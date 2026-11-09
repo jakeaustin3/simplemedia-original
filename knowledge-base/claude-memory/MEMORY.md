@@ -1,0 +1,6 @@
+- [Drive: final video only](drive-upload-final-video-only.md) — ai-influencer saves only stitched.mp4 to Drive, not the whole folder
+- [Speech in sync with action](ai-influencer-speech-sync.md) — talk during the action, about that action, whole sentences, no lag or dead air
+- [Start+end frame push-in](omni-start-end-pushin.md) — user LOVED it: face start frame → close-up end frame, talking from frame one
+- [Julia videos → Desktop](julia-videos-desktop-folder.md) — save finished Julia videos to ~/Desktop/Julie Anderson Vids/
+- [Standard CTA](standard-cta.md) — always end: "If you liked this video, comment YES, and follow me for more health tips." warm, not salesy
+- [Visuals match words](visuals-match-words.md) — each named ingredient visibly goes in as she says it; props real (bananas peeled)

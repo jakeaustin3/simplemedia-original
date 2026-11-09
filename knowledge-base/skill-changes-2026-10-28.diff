@@ -1,0 +1,156 @@
+diff -ru -x __pycache__ x/ai-influencer/parts/omni-storyboard.md /Users/dylanleyes/.claude/skills/ai-influencer/parts/omni-storyboard.md
+--- x/ai-influencer/parts/omni-storyboard.md	2026-10-19 16:53:20
++++ /Users/dylanleyes/.claude/skills/ai-influencer/parts/omni-storyboard.md	2026-10-28 20:35:31
+@@ -34,7 +34,8 @@
+ ## Image prompts
+ - Anchor: "Use the woman from the character reference, wearing <outfit>." + where she stands, framing, props on the table with left/right **of the frame**, her action frozen mid-motion, "She looks straight into the camera, mouth open mid-sentence." Tail: "Natural candid iPhone 14 Pro Max photo, handheld, slight tilt. Vertical 9:16. Deep focus, entire frame sharp, no bokeh, no background blur. No readable store names or brand logos."
+ - Delta: "Same exact image, except <what's gone> and <what's new>. <action>. <state of the container that received something>. She looks straight into the camera, mouth open mid-sentence." + "Same lighting as the reference image. Natural candid iPhone 14 Pro Max photo."
+-- **Face always on camera**: every talking frame shows her face, chest up, looking into the lens, even when the original crops to hands (e.g. chin-down blender shots). Better for continuity and lip sync.
++- **Copy the original's shot, not just its action (student rule, 2026-10-28).** When the original cuts to a close-up (e.g. hands squashing a tomato over the counter, palm up toward the lens, juice dripping into a puddle), make that same close-up: same camera distance and height, same hand pose, same leaning, face out of frame if it is out of frame there. Put the original frame next to the generated image and compare before moving on; the first try at row 2's tomato shot came out too wide and needed a "tight close-up… hand fills the middle of the frame… face and kitchen out of frame" redo. This replaces the old "face always on camera" rule.
++- Talking frames where the original shows the face: her face, looking into the lens, mouth open mid-sentence. Close-ups without a face: her voice still carries the line (the clip prompt says she talks off camera).
+ - **Location reference image in the box**: it copies that photo's framing and people. Say "Use only the room from the second reference image, not its framing and not its people" and spell the framing out explicitly (e.g. "camera at arm's length: head and shoulders fill the top half, hands the bottom half").
+ - Continuity: the used item is put away / set down; the bowl shows everything poured so far.
+ - Never describe the **subject's** face, hair, body or the lighting. Prop people DO get described.
+@@ -42,11 +43,17 @@
+ - **Mixed video** (e.g. Seedance hook, Omni body): this skill only boards the Omni part. The Seedance part comes from `parts/seedance-storyboard.md`; say so at the hand-off.
+ 
+ ## Omni prompts (one per clip)
+-- Format: `The camera <holds steady | pushes forward toward the subject | tilts down slightly toward the X> as she <one simple action>. She says in a <accent from bible §7, default "standard American"> accent: "<exact line>" Natural movement, natural audio.`
+-- **Action and line are two sentences** (". She says…", not "and says…"): with "and says" Omni did the action first, then spoke.
++- Format: `The camera <holds steady | pushes forward toward the subject | tilts down slightly toward the X>. From the very first frame she is already talking while she <one simple action>; the action happens during her words, not before them. She speaks naturally and continuously in a <accent from bible §7, default "standard American"> accent, with no pause before or inside the line: "<exact line>" Natural movement, natural audio.`
++- **Talk and act at the same time (student rule, 2026-10-28).** The old two-sentence format ("…as she drops the tomatoes. She says: …") made Omni do the action first and talk after: up to 2.4 s of silence at the start of a clip, which the student called "terrible". The format above is **proven** (Julia row 2 remake: first word at 0.00 s on both test clips). Still Whisper-check the first clip of every video before running the rest.
++- **Face-to-close-up push-in = Start + End frame (proven, student: "fucking amazing", 2026-10-28).** When the original zooms from the face onto an action (squashing a tomato over the counter), don't board the close-up alone. Make two images: a **start frame** (medium shot, face to camera, mouth open mid-sentence, palm-up hand already holding the prop, action just starting) and an **end frame** (the tight close-up of the action, face out of frame). Put both in Flow's Frames mode Start/End slots (Omni 1.1 Flash, same price as start-only: 6 s 720p = 10 credits). Prompt: `The camera starts on her face, then slowly pushes in and tilts down to a tight close-up of her hand, ending on the close-up of <the result>. From the very first frame she is already talking while she <action>; the <action> happens during her words, not before them. She speaks naturally and continuously in a <accent> accent, with no pause before or inside the line, and keeps talking once her face leaves the frame: "<line>" Natural movement, natural audio.` Result: talking at 0.00 s, smooth push-in from face to the squash, voice continues over the close-up. Use this whenever a shot moves from her face to an object.
++- **The line names what is happening in that same clip (student rule, 2026-10-28).** Pouring orange juice → she talks about the orange juice, never the next ingredient. Never copy an original video's offset where the words run one step behind the action; re-split the script so each clip's words match its own action.
++- **Whole sentences per clip.** Never split a sentence across two clips ("Blend it all for a full minute until" / "smooth and well mixed"): the cut lands mid-sentence and sounds like an unnatural pause.
+ - **Regional slang pulls the accent**: words like "chuck in", "the lot", "mate", "reckon" (Australian/British originals) made the character switch to an Australian accent. When the character's accent differs from the original creator's, swap those words for plain equivalents ("add in", "it all") and tell the student which words changed.
+ - **Accent in every clip**, from the character bible (§7 Voice). No pronunciation or delivery notes.
+ - **Minimal hand movement**: one simple action that continues what the still shows. No lifting things toward the lens, no handoffs, no extra gestures (they glitch). Clips re-animated off one still can repeat the same action.
+ - Word budget: <9 words 4s · 9–15 6s · 17–25 8s · 27–35 10s; split long talking at sentence breaks (~30 words max).
+ - **Hook**: no default push. Write an eye-catching action from the video (e.g. green liquid oozing from the syringe onto the forehead) and set the image's `note`: "Hook note: tailored to this video. Adjust the action until it grabs attention. Not every hook needs a push."
+ 
++- **List lines pause (2026-10-28, banana bread clip 2):** a line that lists ingredients ("peanut butter, two eggs, and a little baking powder") made Omni pause 1.3 s after each item, timed to the spooning. Add "she says the whole list in one quick, flowing breath, no pause between items" to any clip whose line is a list, and Whisper-check the gaps (>0.6 s inside a sentence = redo).
++- **Flow failures:** Omni sometimes returns "Failed" (refunded). Just resubmit the same clip; a failed knife/cutting prompt went through when simplified ("picks up a slice"). Trim any ad-lib Omni adds before the line (ffmpeg -ss to 0.15 s before the first scripted word).
++- **Every named item goes in on camera, on its word (student rule, 2026-10-28).** Banana bread: bananas went in with the peel on, and "two eggs" were already in the bowl, never cracked in. Plan a visible action for each ingredient she names (crack the eggs, pour the powder) and never put an item into a start/end frame before she names it. Write prop state explicitly ("bananas fully peeled, no peel at all").
+diff -ru -x __pycache__ x/ai-influencer/parts/script-remix.md /Users/dylanleyes/.claude/skills/ai-influencer/parts/script-remix.md
+--- x/ai-influencer/parts/script-remix.md	2026-10-19 16:53:20
++++ /Users/dylanleyes/.claude/skills/ai-influencer/parts/script-remix.md	2026-10-28 13:38:17
+@@ -11,12 +11,13 @@
+ 
+ ## Steps
+ 1. **Skeleton** (show it, 4–8 lines): hook type (step-by-step promise · "X just did Y for me" · contrast/"instead of" · cost flip · myth bust · question) → the beats with their job (promise, proof, step 1..n, payoff) → CTA type.
+-2. **Ask one question only if needed:** the CTA (follow · comment a word · link in bio). Default: what they said, else "Follow for more".
++2. **CTA = always the same line (student rule, 2026-10-28):** "If you liked this video, comment YES, and follow me for more health tips." Don't ask, don't vary it, don't copy the original's CTA. (Shop videos: this line after the product CTA.) Prompt its clip with a warm, relaxed, friendly delivery, like talking to a friend, smiling, not salesy; the student found a stiff, sales-y CTA "awkward" with "off" tonality.
+ 3. **Write** with the 20% rule:
+    - Keep: the hook shape, the beat order, the rhythm (sentence lengths, "Let's go", "Step one:"), the length (±10% words).
+    - Change: every noun and claim to the new topic, the tools to ours, the CTA, light flavor of the character's voice.
+    - Never copy a line that only makes sense for the original topic. Never invent results or money claims.
+-4. **Hand off:** split at sentence breaks into ≤30-word Omni clips (or one block for HeyGen), numbers spelled out. Save as `<video folder>parts/script.md.txt`.
++   - Don't keep an original's habit of talking one step behind the action (saying "add the cucumber" while pouring the orange juice). Each step's words go with that step's action.
++4. **Hand off:** split at sentence breaks into ≤30-word Omni clips (or one block for HeyGen), numbers spelled out. One clip = one action = one or more whole sentences about that action; never end a clip mid-sentence. Save as `<video folder>parts/script.md.txt`.
+ 
+ ## Output
+ Skeleton → the script (one block) → the clip split. Nothing else.
+diff -ru -x __pycache__ x/ai-influencer/parts/setup-storage.md /Users/dylanleyes/.claude/skills/ai-influencer/parts/setup-storage.md
+--- x/ai-influencer/parts/setup-storage.md	2026-10-19 16:53:20
++++ /Users/dylanleyes/.claude/skills/ai-influencer/parts/setup-storage.md	2026-10-28 13:44:16
+@@ -19,4 +19,6 @@
+ - From a Video DB row: also note the row number in `video.json` (`"row": N`).
+ 
+ ## Save at the end
+-When the final video is done, ask: **"Save this video to Drive?"** (skip the question if mode = computer). Then `python3 ~/.claude/skills/ai-influencer/scripts/storage.py save "<video folder>"` (in drive mode it clears the local working copy after a clean save). Files over 35 MB are listed: drag those into the Drive folder by hand. Anything the student wants to keep on the computer → `python3 ~/.claude/skills/ai-influencer/scripts/storage.py deliver <file>` (goes to ~/Downloads).
++When the final video is done, ask: **"Save this video to Drive?"** (skip the question if mode = computer). **Upload only the final stitched video** (student rule, 2026-10-28: uploading the whole folder of clips, images and scripts was "so much stuff"), into `Not Posted Videos/<Character>/<YYYY-MM>/<Video topic>/` inside the Drive Videos folder; the student moves it out once it's posted. Don't run `storage.py save` (it uploads the whole folder); upload the one file through the sheet's `upload` action. Ask before clearing the local working copy, since Drive won't hold the clips and images. Files over 35 MB are listed: drag those into the Drive folder by hand. Anything the student wants to keep on the computer → `python3 ~/.claude/skills/ai-influencer/scripts/storage.py deliver <file>` (goes to ~/Downloads).
++
++**Student's save spot (2026-10-28):** finished Julia Anderson videos go to `~/Desktop/Julie Anderson Vids/Julia_<TopicCamelCase>_FINAL.mp4` (match the folder's naming), then reveal it in Finder with `open -R` (final video only). Drive only when asked.
+diff -ru -x __pycache__ x/ai-influencer/parts/stitch.md /Users/dylanleyes/.claude/skills/ai-influencer/parts/stitch.md
+--- x/ai-influencer/parts/stitch.md	2026-10-19 16:53:20
++++ /Users/dylanleyes/.claude/skills/ai-influencer/parts/stitch.md	2026-10-28 02:29:31
+@@ -11,7 +11,7 @@
+    ```
+    python3 ~/.claude/skills/ai-influencer/scripts/stitch.py <folder>/clips --script <folder>/script.txt --out <folder>/stitched.mp4
+    ```
+-   Flags: `--speed 1.15` (pitch kept) · `--pad 0.3` (seconds kept after the last word).
++   Flags: `--speed 1.15` (pitch kept) · `--pad 0.3` (seconds kept after the last word) · `--lead 0.15` (seconds kept before the first word; `-1` keeps the clip start, e.g. for skits).
+ 4. Show the order table it prints. Send the video (SendUserFile if it's available) and drop a copy in `~/Downloads`; say the path.
+ 5. Ask one question: **speed it up?**
+ 
+diff -ru -x __pycache__ x/ai-influencer/rules/METHOD.md /Users/dylanleyes/.claude/skills/ai-influencer/rules/METHOD.md
+--- x/ai-influencer/rules/METHOD.md	2026-10-15 20:11:28
++++ /Users/dylanleyes/.claude/skills/ai-influencer/rules/METHOD.md	2026-10-28 12:55:18
+@@ -99,3 +99,12 @@
+ - Under 30s: one generation (chef chickpea row 39, 30s, 11 clips → G1).
+ - Tool: `seedance_board.py <name>` → seedance-plan.json + seedance-storyboard.png. Next step: parts/seedance-prompt-builder.md, one prompt per generation.
+ - **Before/after hooks (row 42, 2026-09-30):** a before shot and an after shot are separate clips even when the same person talks over both. Read the dialogue for time jumps ("this is her four months later") and check the frames at that line: a new set or a changed body = a new clip. Check the hook every 0.5s, not just the 5-frame strip.
++
++## Julia Anderson, Videos row 2 remake · Omni (Flow) · student's grade: terrible (2026-10-28)
++Rules, tagged **talking head · Omni**:
++21. **Talk and act at the same time.** "…as she drops the tomatoes. She says: …" made Omni act first and talk 1–2.4 s later. Prompts now say she is already talking from the first frame, during the action (`parts/omni-storyboard.md`). Untested: Whisper-check the first clip before running the rest.
++22. **Words match the clip's own action.** Copying the original's offset (words one step behind the action) put "add one chopped cucumber" over the orange-juice pour. Never carry that offset over.
++23. **Whole sentences per clip, never split across a cut**: mid-sentence cuts sounded like unnatural pauses.
++24. **Stitch trims both ends**: `stitch.py` now cuts to 0.15 s before the first word (`--lead`), not only after the last one.
++25. **Copy each shot's framing too** (student, 2026-10-28): the original's clip 2 is a tight close-up of a palm-up hand squashing a tomato over the counter. I had kept her face on camera (old "face always on camera" rule, now removed). Compare the original frame side by side with every generated image.
++26. **Proven, student's favourite (2026-10-28): start + end frame push-in.** Clip 2 of the row 2 remake: start frame = Julia's face with the palm-up tomato, end frame = tight close-up of the squash, prompt "camera starts on her face, then slowly pushes in… already talking from the very first frame… keeps talking once her face leaves the frame". Talking at 0.00 s, push-in landed on the close-up, voice carried over it. Student: "That was fucking amazing. Always remember that." Default for any face-to-object move. Recipe in `parts/omni-storyboard.md`.
+diff -ru -x __pycache__ x/ai-influencer/scripts/sheet.py /Users/dylanleyes/.claude/skills/ai-influencer/scripts/sheet.py
+--- x/ai-influencer/scripts/sheet.py	2026-10-15 20:11:28
++++ /Users/dylanleyes/.claude/skills/ai-influencer/scripts/sheet.py	2026-10-28 01:30:25
+@@ -1,5 +1,7 @@
+ """Talks to the script inside your Google Sheet (google-sheet/Code.gs)."""
+ 
++from __future__ import annotations  # lets `str | None` hints load on the Mac's built-in Python 3.9
++
+ import base64
+ import mimetypes
+ import os
+diff -ru -x __pycache__ x/ai-influencer/scripts/stitch.py /Users/dylanleyes/.claude/skills/ai-influencer/scripts/stitch.py
+--- x/ai-influencer/scripts/stitch.py	2026-10-15 20:11:28
++++ /Users/dylanleyes/.claude/skills/ai-influencer/scripts/stitch.py	2026-10-28 02:28:50
+@@ -1,9 +1,10 @@
+ """/stitch: put Omni (or any ~10s) clips in script order, trim dead air, join.
+ 
+-python3 stitch.py <clips folder or files...> --script script.txt --out out.mp4 [--speed 1.0] [--pad 0.3]
++python3 stitch.py <clips folder or files...> --script script.txt --out out.mp4 [--speed 1.0] [--pad 0.3] [--lead 0.15]
+ - Transcribes every clip (whisper base.en, cached next to the clip as .json).
+ - Orders clips by where their first words appear in the script (fuzzy); no script = filename order.
+-- Trims each clip `pad` s after its last word. If a clip repeats its final phrase
++- Trims each clip to start `lead` s before its first word (--lead -1 keeps the start) and end
++  `pad` s after its last word. If a clip repeats its final phrase
+   ("right now, right now") it cuts after the first one.
+ - Joins (re-encode, 30fps), optional speed-up with pitch kept, levels voice to -16 LUFS.
+ Prints the order table so it can be shown to the student.
+@@ -13,6 +14,7 @@
+ ap = argparse.ArgumentParser()
+ ap.add_argument("inputs", nargs="+"); ap.add_argument("--script"); ap.add_argument("--out", required=True)
+ ap.add_argument("--speed", type=float, default=1.0); ap.add_argument("--pad", type=float, default=0.3)
++ap.add_argument("--lead", type=float, default=0.15)  # silence kept before the first word; dead air there read as "acts, then talks"
+ a = ap.parse_args()
+ 
+ files = []
+@@ -37,7 +39,8 @@
+     for n in (4, 3, 2):  # repeated tail phrase → cut after first copy
+         if len(toks) >= 2 * n and toks[-n:] == toks[-2 * n:-n]:
+             end = w[-n - 1]["end"]; break
+-    clips.append({"f": f, "text": " ".join(x["word"].strip() for x in w), "end": end + a.pad})
++    start = max(0.0, w[0]["start"] - a.lead) if a.lead >= 0 else 0.0
++    clips.append({"f": f, "text": " ".join(x["word"].strip() for x in w), "start": start, "end": end + a.pad})
+ 
+ if a.script:
+     sc = norm(open(a.script).read())
+@@ -47,15 +50,16 @@
+         return m.a
+     clips.sort(key=pos)
+ 
+-print("| # | clip | starts with | trimmed to |")
++print("| # | clip | starts with | kept |")
+ print("|---|---|---|---|")
+ for i, c in enumerate(clips):
+-    print(f"| {i+1} | {os.path.basename(c['f'])} | {c['text'][:50]}… | {c['end']:.2f}s |")
++    print(f"| {i+1} | {os.path.basename(c['f'])} | {c['text'][:50]}… | {c['start']:.2f}–{c['end']:.2f}s |")
+ 
+ ins, fl = [], []
+ for i, c in enumerate(clips):
+     ins += ["-i", c["f"]]
+-    fl.append(f"[{i}:v]trim=0:{c['end']:.2f},setpts=PTS-STARTPTS,fps=30[v{i}];[{i}:a]atrim=0:{c['end']:.2f},asetpts=PTS-STARTPTS[a{i}]")
++    s, e = f"{c['start']:.2f}", f"{c['end']:.2f}"
++    fl.append(f"[{i}:v]trim={s}:{e},setpts=PTS-STARTPTS,fps=30[v{i}];[{i}:a]atrim={s}:{e},asetpts=PTS-STARTPTS[a{i}]")
+ n = len(clips)
+ fl.append("".join(f"[v{i}][a{i}]" for i in range(n)) + f"concat=n={n}:v=1:a=1[vc][ac]")
+ fl.append(f"[vc]setpts=PTS/{a.speed}[v]" if a.speed != 1 else "[vc]null[v]")
